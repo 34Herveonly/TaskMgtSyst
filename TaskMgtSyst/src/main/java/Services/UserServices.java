@@ -3,9 +3,11 @@ package Services;
 import Dto.UserDto;
 import Entity.Users;
 import Entity.roles;
+import JWT.JwtUtil;
 import Repository.RolesRepository;
 import Repository.usersRepository;
 import jakarta.transaction.Transactional;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,7 +23,7 @@ public class UserServices {
     @Autowired
     public  usersRepository userRepository;
     public final BCryptPasswordEncoder passwordEncoder;
-
+    public   RolesRepository rolesRepository;
 
     public UserServices(usersRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -32,7 +34,7 @@ public class UserServices {
 
     Users user = new Users();
     user.setUsername(userDto.getUsername());
-    user.setPassword(userDto.getPassword());
+    user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
     return userRepository.save(user);
     }
@@ -62,10 +64,8 @@ public class UserServices {
             throw new RuntimeException("User already has this role!");
         }
 
-        // Step 4: Add the role to the user's roles list
         user.getRoles().add(role);
 
-        // Step 5: Save the updated user
         userRepository.save(user);
       }
 
@@ -73,24 +73,24 @@ public class UserServices {
         Optional<Users> user= userRepository.findById(id);
 
         if(user.isPresent()){
-            new Exception("User Exists you can proceed with your editing!");
+          throw new Exception("User Exists you can proceed with your editing!");
         }
         user.orElseThrow(()->new Exception("User with id :" + id + "not found!"));
 
-        Users users=new Users();
-        users.setPassword(passwordEncoder.encode(userDto.getPassword()));
-        return userRepository.save(users);
+        Users existingUser= user.get();
+        existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepository.save(existingUser);
       }
 
 
-      public String authenticateUser(UserDto userDto) throws Exception {
+      public String authenticateUser(@NotNull UserDto userDto) throws Exception {
         Optional<Optional<Users>> username= Optional.ofNullable(userRepository.findByName(userDto.getUsername()));
 
-        if(username.isPresent() && passwordEncoder.matches(userDto.getPassword(), username.get().get().getPassword())){
-            return userDto.getUsername();
-        }
-        else{
-            throw new Exception("Username or password is incorrect!");
-        }
+            if(!passwordEncoder.matches(userDto.getPassword(),username.get().get().getPassword())){
+                throw new Exception("Invalid Username or Password!");
+            }
+
+          return JwtUtil.generateToken(username.get().get().getUsername());
+
       }
     }
