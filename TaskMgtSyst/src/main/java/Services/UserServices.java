@@ -8,6 +8,7 @@ import Repository.usersRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -67,7 +68,21 @@ public class UserServices {
         userRepository.save(user);
       }
 
-      public String loginUser(UserDto userDto) {
-        Opt
+      public Users updateUser(long id, UserDto userDto) throws Exception {
+        Optional<Users> user= userRepository.findById(id);
+
+        if(user.isPresent()){
+            new Exception("User Exists you can proceed with your editing!");
+        }
+        user.orElseThrow(()->new Exception("User with id :" + id + "not found!"));
+
+        Users users=new Users();
+        users.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        return userRepository.save(users);
+      }
+
+
+      public boolean authenticateUser(String userName,String password) {
+        boolean username= userRepository.equals(userName);
       }
     }
