@@ -22,6 +22,7 @@ public class UserServices {
     public  usersRepository userRepository;
     public final BCryptPasswordEncoder passwordEncoder;
 
+
     public UserServices(usersRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -82,7 +83,14 @@ public class UserServices {
       }
 
 
-      public boolean authenticateUser(String userName,String password) {
-        boolean username= userRepository.equals(userName);
+      public String authenticateUser(UserDto userDto) throws Exception {
+        Optional<Optional<Users>> username= Optional.ofNullable(userRepository.findByName(userDto.getUsername()));
+
+        if(username.isPresent() && passwordEncoder.matches(userDto.getPassword(), username.get().get().getPassword())){
+            return userDto.getUsername();
+        }
+        else{
+            throw new Exception("Username or password is incorrect!");
+        }
       }
     }
