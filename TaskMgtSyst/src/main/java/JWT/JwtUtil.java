@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class JwtUtil {
 
-    private String secretKey="";
+    private static String secretKey="";
 
     public JwtUtil() {
     try{
@@ -46,7 +46,7 @@ public class JwtUtil {
                 .compact();
 
     }
-        private Key getKey(){
+        private static Key getKey(){
         byte[] keyBytes= Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
