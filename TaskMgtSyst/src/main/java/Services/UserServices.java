@@ -21,9 +21,9 @@ import java.util.Optional;
 @Service
 public class UserServices {
     @Autowired
-    public  usersRepository userRepository;
+    public usersRepository userRepository;
     public final BCryptPasswordEncoder passwordEncoder;
-    public   RolesRepository rolesRepository;
+    public RolesRepository rolesRepository;
 
     public UserServices(usersRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
@@ -32,21 +32,23 @@ public class UserServices {
 
     public Users registerUser(UserDto userDto) {
 
-    Users user = new Users();
-    user.setUsername(userDto.getUsername());
-    user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        Users user = new Users();
+        user.setUsername(userDto.getUsername());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
-    return userRepository.save(user);
+        return userRepository.save(user);
     }
 
     public List<Users> getAllUsers() {
-    return userRepository.findAll();
+        return userRepository.findAll();
     }
+
     public Optional<Users> getUserById(long id) {
-    return userRepository.findById(id);
+        return userRepository.findById(id);
     }
+
     public void deleteUser(long id) {
-    userRepository.deleteById(id);
+        userRepository.deleteById(id);
     }
 
     @Transactional
@@ -67,30 +69,26 @@ public class UserServices {
         user.getRoles().add(role);
 
         userRepository.save(user);
-      }
+    }
 
-      public Users updateUser(long id, UserDto userDto) throws Exception {
-        Optional<Users> user= userRepository.findById(id);
+    public Users updateUser(long id, UserDto userDto) throws Exception {
+        Optional<Users> user = userRepository.findById(id);
 
-        if(user.isPresent()){
-          throw new Exception("User Exists you can proceed with your editing!");
+        if (user.isEmpty()) {
+            throw new Exception("User with id " + id + "is not found!");
         }
-        user.orElseThrow(()->new Exception("User with id :" + id + "not found!"));
 
-        Users existingUser= user.get();
+        Users existingUser = user.get();
         existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(existingUser);
-      }
-
-
-      public String authenticateUser(@NotNull UserDto userDto) throws Exception {
-        Optional<Optional<Users>> username= Optional.ofNullable(userRepository.findByName(userDto.getUsername()));
-
-            if(!passwordEncoder.matches(userDto.getPassword(),username.get().get().getPassword())){
-                throw new Exception("Invalid Username or Password!");
-            }
-
-          return JwtUtil.generateToken(username.get().get().getUsername());
-
-      }
     }
+
+
+    public String authenticateUser(@NotNull UserDto userDto) throws Exception {
+        Optional<Users> user = userRepository.findByName(userDto.getUsername());
+        if (user.isEmpty() || !passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
+            throw new Exception("Invalid Username or Password!");
+        }
+        return JwtUtil.generateToken(user.get().getUsername());
+    }
+}
