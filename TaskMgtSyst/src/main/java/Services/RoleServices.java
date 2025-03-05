@@ -48,9 +48,6 @@ public class RoleServices {
         role role=rolesRepository.findByName(roleName)
                 .orElseThrow(()->new RuntimeException("There is no role named "+roleName));
 
-
-
-
     }
 
 
