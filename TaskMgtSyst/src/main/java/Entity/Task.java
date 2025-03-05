@@ -2,15 +2,11 @@ package Entity;
 
 import jakarta.persistence.*;
 
-import javax.management.Notification;
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Table(name = "tasks")
-public class Tasks {
+public class Task {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,14 +21,17 @@ public class Tasks {
     private LocalDateTime dueDate;
     @Column(length = 150)
     @ManyToOne
-    private Users assignedTo;
+    private User assignedTo;
     @Column(length = 150)
     @ManyToOne
-    private  Users createdBy;
+    private User createdBy;
     @Column(length = 150)
     private LocalDateTime createdAt;
     @Column(length = 150)
     private LocalDateTime updatedAt;
+
+    public void setTitle(String title) {
+    }
 
 
     public enum Status{

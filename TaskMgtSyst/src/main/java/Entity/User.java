@@ -12,7 +12,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "users")
-public class Users {
+public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,9 +45,9 @@ public class Users {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private Set<roles> roles = new HashSet<>(); // ✅ Corrected to use Set<Role>
+    private Set<role> roles = new HashSet<>(); // ✅ Corrected to use Set<Role>
 
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tasks> tasks ;
+    private List<Task> tasks ;
 
 }

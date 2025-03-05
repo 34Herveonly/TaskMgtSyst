@@ -17,7 +17,7 @@ public class audit {
     @Column(length = 200)
     private long entityId;
     @Column(length = 200)
-    private Users user;
+    private User user;
     @Column
     private LocalDateTime timeStamp;
 }

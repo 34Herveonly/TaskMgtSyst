@@ -1,21 +1,18 @@
 package Services;
 
 import Dto.UserDto;
-import Entity.Users;
-import Entity.roles;
+import Entity.User;
+import Entity.role;
 import JWT.JwtUtil;
 import Repository.RolesRepository;
 import Repository.usersRepository;
 import jakarta.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.Optional;
 
 @Service
@@ -33,20 +30,20 @@ public class UserServices {
         this.rolesRepository = rolesRepository;
     }
 
-    public Users registerUser(UserDto userDto) {
+    public User registerUser(UserDto userDto) {
 
-        Users user = new Users();
+        User user = new User();
         user.setUsername(userDto.getUsername());
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
 
         return userRepository.save(user);
     }
 
-    public List<Users> getAllUsers() {
+    public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-    public Optional<Users> getUserById(long id) {
+    public Optional<User> getUserById(long id) {
         return userRepository.findById(id);
     }
 
@@ -57,11 +54,11 @@ public class UserServices {
     @Transactional
     public void assignRoleToUser(long id, String roleName) {
         // Step 1: Find the user
-        Users user = userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         // Step 2: Find the role
-        roles role = rolesRepository.findByName(roleName)
+        role role = rolesRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found!"));
 
         // Step 3: Check if the user already has this role
@@ -74,21 +71,21 @@ public class UserServices {
         userRepository.save(user);
     }
 
-    public Users updateUser(long id, UserDto userDto) throws Exception {
-        Optional<Users> user = userRepository.findById(id);
+    public User updateUser(long id, UserDto userDto) throws Exception {
+        Optional<User> user = userRepository.findById(id);
 
         if (user.isEmpty()) {
             throw new Exception("User with id " + id + "is not found!");
         }
 
-        Users existingUser = user.get();
+        User existingUser = user.get();
         existingUser.setPassword(passwordEncoder.encode(userDto.getPassword()));
         return userRepository.save(existingUser);
     }
 
 
     public String authenticateUser(@NotNull UserDto userDto) throws Exception {
-        Optional<Users> user = userRepository.findByName(userDto.getUsername());
+        Optional<User> user = userRepository.findByName(userDto.getUsername());
         if (user.isEmpty() || !passwordEncoder.matches(userDto.getPassword(), user.get().getPassword())) {
             throw new Exception("Invalid Username or Password!");
         }

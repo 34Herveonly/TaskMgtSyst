@@ -10,7 +10,7 @@ import java.util.Set;
 @Setter
 @Entity
 @Table(name = "roles")
-public class roles {
+public class role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,6 @@ public class roles {
     private String rolename;
 
     @ManyToMany(mappedBy = "roles")
-    private Set<Users> users = new HashSet<>(); // ✅ Corrected to use Set<Users>
+    private Set<User> users = new HashSet<>(); // ✅ Corrected to use Set<Users>
 
 }

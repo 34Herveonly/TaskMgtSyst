@@ -1,13 +1,13 @@
 package Repository;
 
-import Entity.Users;
+import Entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface usersRepository extends JpaRepository<Users,Long> {
+public interface usersRepository extends JpaRepository<User,Long> {
 
-    Optional<Users> findByName(String username);
+    Optional<User> findByName(String username);
 }

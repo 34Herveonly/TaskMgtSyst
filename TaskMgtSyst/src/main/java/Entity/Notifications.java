@@ -3,7 +3,6 @@ package Entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.AccessType;
 import org.springframework.scheduling.config.Task;
 
 import java.sql.Date;
@@ -19,7 +18,7 @@ public class Notifications {
     @Column
 
     @ManyToOne
-    private Users user;
+    private User user;
     @Column(length = 450)
     private String message;
     @Column(length = 450)
