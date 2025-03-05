@@ -23,11 +23,14 @@ public class UserServices {
     @Autowired
     public usersRepository userRepository;
     public final BCryptPasswordEncoder passwordEncoder;
+    @Autowired
     public RolesRepository rolesRepository;
 
-    public UserServices(usersRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+
+    public UserServices(usersRepository userRepository, BCryptPasswordEncoder passwordEncoder, RolesRepository rolesRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.rolesRepository = rolesRepository;
     }
 
     public Users registerUser(UserDto userDto) {
@@ -58,7 +61,7 @@ public class UserServices {
                 .orElseThrow(() -> new RuntimeException("User not found!"));
 
         // Step 2: Find the role
-        roles role = RolesRepository.findByName(roleName)
+        roles role = rolesRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found!"));
 
         // Step 3: Check if the user already has this role
