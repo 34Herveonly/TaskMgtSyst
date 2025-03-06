@@ -1,6 +1,7 @@
 package Entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -16,6 +17,7 @@ public class Task {
     @Column(length = 350)
     private String description;
 
+    @Getter
     private Status status;
     @Column(length = 150)
     private LocalDateTime dueDate;
@@ -33,6 +35,9 @@ public class Task {
     public void setTitle(String title) {
     }
 
+    public Status getStatus() {
+        return status;
+    }
 
     public enum Status{
         Todo,In_Progress,Done
