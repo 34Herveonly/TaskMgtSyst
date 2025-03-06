@@ -42,6 +42,18 @@ public class Task {
         this.status = status;
     }
 
+    public String getDueDate() {
+        return dueDate.toString();
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public enum Status{
         Todo,In_Progress,Done
     }

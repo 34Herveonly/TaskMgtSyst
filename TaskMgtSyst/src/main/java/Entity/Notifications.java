@@ -16,8 +16,9 @@ public class Notifications {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @Column
-
+    private String title;
     @ManyToOne
+    @Column
     private User user;
     @Column(length = 450)
     private String message;
