@@ -54,4 +54,15 @@ public class TaskServices {
                 return taskRepository.findByUserAndRole(user, role);
 
     }
+
+//    public List<Task> getTaskByStatus(String status,String title ) {
+//        Task role = taskRepository.findByTaskName(title)
+//                .orElseThrow(() -> new RuntimeException("Task with title: " + title + "not found"));
+//
+////        String currentStatus=taskRepository.findTaskByStatus(status);
+////        if(){
+////
+////        }
+//    }
+
 }

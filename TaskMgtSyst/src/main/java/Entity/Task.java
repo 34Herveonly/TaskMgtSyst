@@ -15,7 +15,7 @@ public class Task {
     private String title;
     @Column(length = 350)
     private String description;
-    @Column(length = 150)
+
     private Status status;
     @Column(length = 150)
     private LocalDateTime dueDate;
