@@ -35,8 +35,11 @@ public class Task {
     public void setTitle(String title) {
     }
 
-    public Status getStatus() {
-        return status;
+    public Status getStatus(Status status) {
+        return this.status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
     }
 
     public enum Status{

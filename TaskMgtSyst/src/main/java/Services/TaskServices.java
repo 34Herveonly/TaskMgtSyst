@@ -55,6 +55,12 @@ public class TaskServices {
 
         }
 
+        public void updateTaskStatus(String title, Task.Status status) {
+        Task task = taskRepository.findByTaskName(title)
+                .orElseThrow(()->new RuntimeException("Task with title: " + title + "not found"));
+
+        task.setStatus(task.getStatus(status));
+        }
     }
 
 
