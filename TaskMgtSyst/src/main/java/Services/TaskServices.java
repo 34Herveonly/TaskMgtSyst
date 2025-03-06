@@ -53,27 +53,7 @@ public class TaskServices {
 
                 return taskRepository.findByUserAndRole(user, role);
 
-    }
-
-//    public List<Task> getTaskByStatus(String status,String title ) {
-//        Task task = taskRepository.findByTaskName(title)
-//                .orElseThrow(() -> new RuntimeException("Task with title: " + title + "not found"));
-//
-//
-//
-//        Task.Status currentStatus = task.getStatus();
-//
-//
-//        private boolean isValidStatusTransition(Task.Status currrentStatus,Task.Status newStatus){
-//
-//            return(currentStatus == Task.Status.Todo && newStatus == Task.Status.In_Progress) ||
-//                    (currentStatus == Task.Status.In_Progress && newStatus == Task.Status.Done);
-//
-//        }
-//
-//        if(!isValidStatusTransition(currentStatus,newSatus))
-//
-//        }
+        }
 
     }
 
